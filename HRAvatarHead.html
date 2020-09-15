@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        #form{
+            text-align: center;
+            background-color: lightblue;
+            padding: 15px;
+        }
+
+        #svg > svg {
+            padding: 1em;
+            margin-right: 0.3em;
+        }
+		#changebg > button {
+			padding: 10px;
+			border: none;
+		}
+		#red{
+			background-color: #E74C3C;
+		}
+		#lyellow{
+			background-color: #F7DC6F;
+		}
+		#lgreen{
+			background-color: #82E0AA;
+		}
+		#lblue{
+			background-color: lightblue;
+		}
+		#white{
+			background-color: white;
+		}
+		#black{
+			background-color: #2C3E50;
+		}
+		#gray{
+			background-color: gray;
+		}
+    </style>
+    <title>Highrise Avatar Previewer</title>
+</head>
+<body id="body">
+	<div id="changebg" style="border: 0px; position:fixed; bottom: 10px; right: 5px; background-color: #FFFFFFCC; padding:10px;">
+		Background Color<br>
+        <button onClick="changeBackg(1);" id="red">
+        <button onClick="changeBackg(2);" id="lyellow">
+        <button onClick="changeBackg(3);" id="lgreen">
+        <button onClick="changeBackg(4);" id="lblue">
+        <button onClick="changeBackg(5);" id="black">
+        <button onClick="changeBackg(6);" id="gray">
+        <button onClick="changeBackg(0);" id="white">
+	</div>
+    <div id="form">
+        <input type="text" name="hrid" id="hrid" placeholder="Enter Highrise ID here..." required>
+        <input type="button" value="Go!" id="dohead"><br>
+        <input type="radio" id="large" name="size" value="large" checked>
+        <label for="large" id="labelsize">Normal</label>
+        <input type="radio" id="xlarge" name="size" value="xlarge" required>
+        <label for="xlarge" id="labelsize">Large</label>
+        <input type="radio" id="xxlarge" name="size" value="large">
+        <label for="xxlarge" id="labelsize">X-Large</label>
+        <input type="radio" id="xxxlarge" name="size" value="large">
+        <label for="xxlarge" id="labelsize">XX-Large</label><br>
+        <input type="radio" id="boxed" name="border" value="0%" checked>
+        <label for="boxed" id="labelborder">Box</label>
+        <input type="radio" id="circle" name="border" value="50%" required>
+        <label for="circle" id="labelborder">Circle  </label> ||
+        <input type="radio" id="hrhead" name="gettype" checked>
+        <label for="hrhead" id="labeltype">Head</label>
+        <input type="radio" id="hrbody" name="gettype" required>
+        <label for="hrbody" id="labeltype">Body</label>
+    </div>
+    <div id="svg"></div><br>
+    </div>
+
+
+
+</body>
+<script>
+	document.getElementById('dohead').addEventListener('click', checkRadio);
+	
+	function checkRadio(){
+		if(document.getElementById('hrhead').checked){
+			doHead();
+		} else if (document.getElementById('hrbody').checked){
+			doBody();
+		}
+	}
+	
+	function doBody(){
+        fetch('https://highrise.world/avatar/' + document.getElementById('hrid').value + '?direction=front&mouth=PlainMouth')
+            .then(function (response) {
+                switch (response.status) {
+                    case 200:
+                        return response.text();
+                    case 404:
+                        throw response;
+        }
+    })
+    .then(function (template) {
+        document.getElementById("svg").innerHTML=template.replace('<svg xmlns="http://www.w3.org/2000/svg">','<svg xmlns="http://www.w3.org/2000/svg" id="hravatarresult" viewBox="-54.57597351074219 -185.0089874267578 102.43496704101562 200.87598419189453"');
+            if(document.getElementById('circle').checked){
+                document.getElementById('hravatarresult').style.borderRadius = "50%"
+            } else {
+                document.getElementById('hravatarresult').style.borderRadius = "0%"
+            }
+            if(document.getElementById('xxlarge').checked){
+                document.getElementById('hravatarresult').style.height = "45em";
+                document.getElementById('hravatarresult').style.width = "45em";
+            } else if(document.getElementById('xxxlarge').checked){
+                document.getElementById('hravatarresult').style.height = "70em";
+                document.getElementById('hravatarresult').style.width = "70em";
+            } else if(document.getElementById('xlarge').checked){
+                document.getElementById('hravatarresult').style.height = "30em";
+                document.getElementById('hravatarresult').style.width = "30em";
+            } else {
+                document.getElementById('hravatarresult').style.height = "20em";
+                document.getElementById('hravatarresult').style.width = "20em";
+            }
+		document.getElementById("btndl").innerHTML='<a href="https://highrise.world/avatar/' + document.getElementById('hrid').value + '?direction=front&mouth=PlainMouth" download><input type="button" value="Download!"></a>'
+		document.getElementById("btndl").style.display = "block";
+    })
+    .catch(function (response) {
+        console.log(response.statusText);
+    });
+	}
+	
+	function doHead(){
+        fetch('https://highrise.world/avatar/' + document.getElementById('hrid').value)
+            .then(function (response) {
+                switch (response.status) {
+                    case 200:
+                        return response.text();
+                    case 404:
+                        throw response;
+        }
+    })
+    .then(function (template) {
+        document.getElementById("svg").innerHTML=template.replace('<svg xmlns="http://www.w3.org/2000/svg">','<svg xmlns="http://www.w3.org/2000/svg" id="hravatarresult" viewBox="-54.57597351074219 -161.0089874267578 102.43496704101562 76.87598419189453"');
+            if(document.getElementById('circle').checked){
+                document.getElementById('hravatarresult').style.borderRadius = "50%"
+            } else {
+                document.getElementById('hravatarresult').style.borderRadius = "0%"
+            }
+            if(document.getElementById('xxlarge').checked){
+                document.getElementById('hravatarresult').style.height = "45em";
+                document.getElementById('hravatarresult').style.width = "45em";
+            } else if(document.getElementById('xlarge').checked){
+                document.getElementById('hravatarresult').style.height = "30em";
+                document.getElementById('hravatarresult').style.width = "30em";
+            } else if(document.getElementById('xxxlarge').checked){
+                document.getElementById('hravatarresult').style.height = "70em";
+                document.getElementById('hravatarresult').style.width = "70em";
+            } else {
+                document.getElementById('hravatarresult').style.height = "20em";
+                document.getElementById('hravatarresult').style.width = "20em";
+            }
+    })
+    .catch(function (response) {
+        console.log(response.statusText);
+    });
+    }
+	
+	function changeBackg(a){
+		switch(a){
+			case 1:
+				document.getElementById('body').style.backgroundColor = "#E74C3C";
+				break;
+			case 2:
+				document.getElementById('body').style.backgroundColor = "#F7DC6F";
+				break;
+			case 3:
+				document.getElementById('body').style.backgroundColor = "#82E0AA";
+				break;
+			case 4:
+				document.getElementById('body').style.backgroundColor = "lightblue";
+				break;
+			case 5:
+				document.getElementById('body').style.backgroundColor = "#2C3E50";
+				break;
+			case 6:
+				document.getElementById('body').style.backgroundColor = "gray";
+				break;
+			default:
+				document.getElementById('body').style.backgroundColor = "white";
+				break;
+		}
+	}
+
+</script>
+</html>
